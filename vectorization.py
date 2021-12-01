@@ -20,6 +20,7 @@ def send_angle_r(input_angle_rads, input_mag):
     pwm_1 = motor_pwms[0].to_bytes(2, 'big')
     pwm_2 = motor_pwms[1].to_bytes(2, 'big')
     pwm_3 = motor_pwms[2].to_bytes(2, 'big')
+    message_begin = time.time()
     ser.write(pwm_1)
     ser.write(pwm_2)
     ser.write(pwm_3)
@@ -27,6 +28,8 @@ def send_angle_r(input_angle_rads, input_mag):
     
     line = ser.readline().decode('utf-8').rstrip()
     if line != "":
+        message_end = time.time()
+        #print("Time between sending and recieving to/from Arduino:", message_end - message_begin)
         print(line)
         
     time.sleep(0.5)
@@ -34,6 +37,12 @@ def send_angle_r(input_angle_rads, input_mag):
     #input_angle_rads %= 2*pi
 
 def find_pwm(theta, r):
+
+    r = (r * 1.2)
+    
+    if(r >= 1):
+        r = 1
+        
     motor_1_pwm = 0
     motor_2_pwm = 0
     motor_3_pwm = 0
@@ -43,7 +52,7 @@ def find_pwm(theta, r):
     c2 = 0
     
     if(r <= 1):
-        theta += 0.41965
+        theta += 0.523599
         theta %= 2*pi
         
         #print("Angle", degrees(theta),"Mag:", r)
@@ -81,8 +90,8 @@ def find_pwm(theta, r):
         
 
         
-        c1 = int(interp(c1, [0, 1], [1000,1600]))
-        c2 = int(interp(c2, [0, 1], [1000,1600]))
+        c1 = int(interp(c1, [0, 1], [1000,2000]))
+        c2 = int(interp(c2, [0, 1], [1000,2000]))
         
         #Min value that motor spins at, makes sure that not only one motor spins
         

@@ -21,6 +21,6 @@ def relativeLocation(target_center, img_center):
     disp = (img_center[0]-target_center[0], img_center[1]-target_center[1])
     dist = np.sqrt(disp[0]**2 + disp[1]**2)
     angle = (np.arctan2(disp[0], disp[1]) + np.pi/2) % (2*np.pi)
-    maxDist = 200 # np.sqrt(img_center[0]**2 + img_center[1]**2)
+    maxDist = np.sqrt(img_center[0]**2 + img_center[1]**2)
 
     return (dist/maxDist), angle
